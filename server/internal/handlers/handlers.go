@@ -4,7 +4,6 @@ import (
 	"learn_go/internal/app"
 
 	"github.com/go-chi/chi/v5"
-	chimiddle "github.com/go-chi/chi/v5/middleware"
 )
 
 type Handler struct {
@@ -12,8 +11,6 @@ type Handler struct {
 }
 
 func RegisterRoutes(router *chi.Mux, app *app.App) {
-	router.Use(chimiddle.StripSlashes)
-
 	handler := &Handler{
 		App: app,
 	}

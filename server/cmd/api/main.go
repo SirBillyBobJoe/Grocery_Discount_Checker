@@ -21,6 +21,8 @@ import (
 
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo/options"
+
+	chimiddle "github.com/go-chi/chi/v5/middleware"
 )
 
 func main() {
@@ -56,6 +58,18 @@ func main() {
 	}()
 
 	var router *chi.Mux = chi.NewRouter()
+
+	router.Use(chimiddle.StripSlashes)
+
+	// 1️⃣ Middleware — MUST COME FIRST
+	router.Use(cors.Handler(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		ExposedHeaders:   []string{"Link"},
+		AllowCredentials: false,
+		MaxAge:           300,
+	}))
 
 	database := client.Database("discounts")
 	subscriptionRepository := repository.NewSubscriptionRepository(database)
