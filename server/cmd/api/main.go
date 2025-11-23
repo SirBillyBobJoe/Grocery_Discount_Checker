@@ -16,6 +16,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/mongo"
 
+	"os"
 	"time"
 
 	"github.com/joho/godotenv"
@@ -31,7 +32,7 @@ func main() {
 	ctx, cancel := context.WithTimeout(rootCtx, 10*time.Second)
 	defer cancel()
 
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	clientOptions := options.Client().ApplyURI(os.Getenv("MONGO_DB_URL"))
 	client, err := mongo.Connect(ctx, clientOptions)
 
 	if err != nil {
