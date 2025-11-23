@@ -9,6 +9,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/cors"
 	log "github.com/sirupsen/logrus"
 
 	"context"
@@ -58,6 +59,15 @@ func main() {
 	database := client.Database("discounts")
 	subscriptionRepository := repository.NewSubscriptionRepository(database)
 	App := app.NewApp(subscriptionRepository)
+
+	router.Use(cors.Handler(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		ExposedHeaders:   []string{"Link"},
+		AllowCredentials: false,
+		MaxAge:           300,
+	}))
 
 	handlers.RegisterRoutes(router, App)
 
