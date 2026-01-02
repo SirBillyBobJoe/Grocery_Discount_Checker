@@ -10,7 +10,7 @@ function App() {
     setMsg("Sending...");
 
     try {
-      const res = await axios.post("http://localhost:8080/api/subscribe", {
+      await axios.post("/api/subscribe", {
         itemId,
         email,
       });
